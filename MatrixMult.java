@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.util.Random;
+
 
 public class MatrixMult {
     private static int[][] readMatrixFromFile(String filename) throws IOException {
@@ -49,7 +51,7 @@ public class MatrixMult {
         return result;
     }
 
-    public static void main(String[] args) throws IOException {
+    private static void withFiles() throws IOException {
         String m1 = "";
         java.util.Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the file name of your first matrix:");
@@ -59,7 +61,6 @@ public class MatrixMult {
         java.util.Scanner scanner1 = new Scanner(System.in);
         System.out.println("Enter the file name of your second matrix:");
         m2 = scanner1.nextLine();
-        scanner.close();
         scanner1.close();
 
         int[][] matrix1 = readMatrixFromFile(m1);
@@ -88,5 +89,72 @@ public class MatrixMult {
             buffer.newLine();
         }
         buffer.close();
+        scanner.close();
+    }
+
+    private static void withRandom() throws IOException {
+        java.util.Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter number of rows");
+        int rows = scanner.nextInt();
+
+        Random rand = new Random();
+
+        int[][] matrix1 = new int[rows][rows];
+        int[][] matrix2 = new int[rows][rows];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < rows; j++) {
+                matrix1[i][j] = rand.nextInt(10);
+            }
+        }
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < rows; j++) {
+                matrix2[i][j] = rand.nextInt(10);
+            }
+        }
+
+        System.out.println("Here is your first random matrix:");
+        for (int i = 0; i < matrix1.length; i++) {
+            System.out.println(Arrays.toString(matrix1[i]));
+        }
+
+        System.out.println("Here is your second random matrix:");
+        for (int i = 0; i < matrix2.length; i++) {
+            System.out.println(Arrays.toString(matrix2[i]));
+        }
+
+        System.out.println("Here is your result matrix:");
+        int[][] result = multiplyMatrix(matrix1, matrix2);
+        for (int i = 0; i < result.length; i++) {
+            System.out.println(Arrays.toString(result[i]));
+        }
+        
+
+
+        FileWriter writer = new FileWriter("matrix3.txt");
+        BufferedWriter buffer = new BufferedWriter(writer);
+        for (int i = 0; i < result.length; i++) {
+            buffer.write(Arrays.toString(result[i]));
+            buffer.newLine();
+        }
+        buffer.close();
+        scanner.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+        java.util.Scanner scanner = new Scanner(System.in);
+        System.out.println("Type 'file' for files, 'random' for random matricies");
+        String choice = scanner.nextLine();
+
+        if (choice.equals("file")) {
+            withFiles();
+        } else if (choice.equals("random")) {
+            withRandom();
+        } else {
+            System.out.println("Did not give correct input, please try again");
+        }
+
+        scanner.close();
+
     }
 }
